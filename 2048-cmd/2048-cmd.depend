@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1556205426 source:d:\workspace\c\sdl2.0.9\2048\2048-cmd\main.cpp
+	<iostream>
+	<ctime>
+	<cstdlib>
+	<cassert>
+
