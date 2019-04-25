@@ -20,6 +20,8 @@ pair<int, int> gen_unoccupied_pos();
 void apply_move(int current_direction);
 bool can_do_move(int line, int col, int next_line, int next_col);
 
+void add_piece();
+
 int main()
 {
     srand(time(0));
@@ -55,8 +57,7 @@ void new_game()
         for(int j = 0; j < BOARD_SIZE; j++)
             board[i][j] = 0;
     }
-    pair<int,int> pos = gen_unoccupied_pos();
-    board[pos.first][pos.second] = 2;
+    add_piece();
 }
 
 void showUI()
@@ -119,6 +120,8 @@ void apply_move(int direction)
             }
         }
     }
+    if(move_possible)
+        add_piece();
 }
 
 bool can_do_move(int line, int col, int next_line, int next_col)
@@ -127,4 +130,10 @@ bool can_do_move(int line, int col, int next_line, int next_col)
        || board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0)
         return false;
     return true;
+}
+
+void add_piece()
+{
+    pair<int,int> pos = gen_unoccupied_pos();
+    board[pos.first][pos.second] = 2;
 }
