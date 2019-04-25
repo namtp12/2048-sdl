@@ -22,6 +22,7 @@ bool can_do_move(int line, int col, int next_line, int next_col);
 
 int main()
 {
+    srand(time(0));
     char command, commandToDir[256];
     int current_direction;
     commandToDir['s'] = 0;
@@ -40,6 +41,7 @@ int main()
         else
         {
             current_direction = commandToDir[(int)command];
+            apply_move(current_direction);
 //            cout << current_direction << endl;
         }
     }
@@ -64,7 +66,7 @@ void showUI()
         for(int j = 0; j < BOARD_SIZE; j++)
         {
             if(!board[i][j])
-                cout << " ";
+                cout << ".";
             else
                 cout << board[i][j];
         }
@@ -81,7 +83,7 @@ pair<int, int> gen_unoccupied_pos()
     {
         line = rand() % 4;
         col = rand() % 4;
-        if(board[line][occupied] == 0)
+        if(board[line][col] == 0)
             occupied = 0;
     }
 //    assert(0 <= line && line <= 3);
@@ -92,17 +94,37 @@ pair<int, int> gen_unoccupied_pos()
 void apply_move(int direction)
 {
     int start_line = 0, start_col = 0, line_step = 1, col_step = 1;
-    switch(direction)
+    if(direction == 0)
     {
-    case 0:
-
+        start_line = 3;
+        line_step = -1;
+    }
+    if(direction == 1)
+    {
+        start_col = 3;
+        col_step = -1;
+    }
+    int next_i, next_j, move_possible = 0;
+    for(int i = start_line; 0 <= i && i < 4; i += line_step)
+    {
+        for(int j = start_col; 0 <=j && j < 4; j += col_step)
+        {
+            next_i = i + dir_line[direction];
+            next_j = j + dir_col[direction];
+            if(can_do_move(i, j, next_i, next_j))
+            {
+                board[next_i][next_j] += board[i][j];
+                board[i][j] = 0;
+                move_possible = 1;
+            }
+        }
     }
 }
 
 bool can_do_move(int line, int col, int next_line, int next_col)
 {
-    if(next_line < 0 || next_col < 0 || next_line >= 4 || next_col >= 0
-       || (board[line][col] !board[next_line][next_col] && board[next_line][next_col] != 0))
+    if(next_line < 0 || next_col < 0 || next_line >= 4 || next_col >= 4
+       || board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0)
         return false;
     return true;
 }
