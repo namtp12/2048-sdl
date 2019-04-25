@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <iomanip>
 #include <cassert>
 
 using namespace std;
@@ -62,14 +63,15 @@ void new_game()
 
 void showUI()
 {
+    system("cls");
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
             if(!board[i][j])
-                cout << ".";
+                cout << setw(4) << ".";
             else
-                cout << board[i][j];
+                cout << setw(4) << board[i][j];
         }
         cout << endl;
     }
@@ -127,7 +129,7 @@ void apply_move(int direction)
 bool can_do_move(int line, int col, int next_line, int next_col)
 {
     if(next_line < 0 || next_col < 0 || next_line >= 4 || next_col >= 4
-       || board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0)
+       || (board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0))
         return false;
     return true;
 }
