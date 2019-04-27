@@ -107,22 +107,32 @@ void apply_move(int direction)
         start_col = 3;
         col_step = -1;
     }
-    int next_i, next_j, move_possible = 0;
-    for(int i = start_line; 0 <= i && i < 4; i += line_step)
+    int next_i, next_j, move_possible, can_add_piece = 0;
+    do
     {
-        for(int j = start_col; 0 <=j && j < 4; j += col_step)
+        move_possible = 0, can_add_piece = 0;
+        for(int i = start_line; 0 <= i && i < 4; i += line_step)
         {
-            next_i = i + dir_line[direction];
-            next_j = j + dir_col[direction];
-            if(can_do_move(i, j, next_i, next_j))
+            for(int j = start_col; 0 <=j && j < 4; j += col_step)
             {
-                board[next_i][next_j] += board[i][j];
-                board[i][j] = 0;
-                move_possible = 1;
+                next_i = i + dir_line[direction];
+                next_j = j + dir_col[direction];
+                if(board[i][j] && can_do_move(i, j, next_i, next_j))
+                {
+                    board[next_i][next_j] += board[i][j];
+                    board[i][j] = 0;
+                    move_possible = 1;
+                    can_add_piece = 1;
+                }
             }
         }
+//        showUI();
+//        char c;
+//        cin >> c;
+//        cout << "debug";
     }
-    if(move_possible)
+    while(move_possible);
+    if(can_add_piece)
         add_piece();
 }
 
