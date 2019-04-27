@@ -33,6 +33,7 @@ int main()
     commandToDir['w'] = 2;
     commandToDir['a'] = 3;
 
+    new_game();
     while(1)
     {
         showUI();
@@ -64,6 +65,7 @@ void new_game()
 void showUI()
 {
     system("cls");
+    cout << "n: new game, w: up-1, s: down-0, a: left-3, d: right-2" << endl;
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -75,7 +77,6 @@ void showUI()
         }
         cout << endl;
     }
-    cout << "n: new game, w: up-1, s: down-0, a: left-3, d: right-2" << endl;
 }
 
 pair<int, int> gen_unoccupied_pos()
@@ -110,7 +111,7 @@ void apply_move(int direction)
     int next_i, next_j, move_possible, can_add_piece = 0;
     do
     {
-        move_possible = 0, can_add_piece = 0;
+        move_possible = 0;
         for(int i = start_line; 0 <= i && i < 4; i += line_step)
         {
             for(int j = start_col; 0 <=j && j < 4; j += col_step)
@@ -126,10 +127,6 @@ void apply_move(int direction)
                 }
             }
         }
-//        showUI();
-//        char c;
-//        cin >> c;
-//        cout << "debug";
     }
     while(move_possible);
     if(can_add_piece)
