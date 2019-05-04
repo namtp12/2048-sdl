@@ -18,7 +18,7 @@
 			<Target title="Release">
 				<Option output="bin/Release/2048-cmd" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
@@ -27,19 +27,42 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Environment>
+				<Variable name="SDL_BIN" value="D:\ProgramFiles\CodeBlocks1211\MinGW\3rd\SDL2-2.0.0\i686-w64-mingw32\bin" />
+			</Environment>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-fexceptions" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2-2.0.9/i686-w64-mingw32/include" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_image-2.0.4/i686-w64-mingw32/include" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_ttf-2.0.15/i686-w64-mingw32/include" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_mixer-2.0.4/i686-w64-mingw32/include" />
 		</Compiler>
-		<Unit filename="include/GameCmd.h" />
+		<Linker>
+			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image" />
+			<Add option="-lSDL2_ttf" />
+			<Add option="-lSDL2_mixer" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2-2.0.9/i686-w64-mingw32/lib" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_image-2.0.4/i686-w64-mingw32/lib" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_ttf-2.0.15/i686-w64-mingw32/lib" />
+			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_mixer-2.0.4/i686-w64-mingw32/lib" />
+		</Linker>
+		<Unit filename="cb.bmp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/GameCmd.cpp" />
 		<Extensions>
 			<code_completion />
-			<envvars />
+			<envvars set="sdl" />
 			<debugger />
 			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
