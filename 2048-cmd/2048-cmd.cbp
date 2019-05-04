@@ -32,7 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/GameCmd.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/GameCmd.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
