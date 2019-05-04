@@ -4,12 +4,14 @@
 #include <iomanip>
 #include <cassert>
 #include "include/GameCmd.h"
+#include "include/Game.h"
+#include <SDL2/SDL.h>
 
 using namespace std;
 
-GameCmd g;
+Game g;
 
-int main()
+int main(int argc, char* args[])
 {
     srand(time(0));
     char command, commandToDir[256];
