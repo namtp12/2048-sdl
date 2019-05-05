@@ -31,7 +31,17 @@ int main(int argc, char* argv[])
         cout << "Can not load media" << endl;
         return -1;
     }
-    draw();
+    // Handle event
+    SDL_Event e;
+    bool quit = false;
+    while(SDL_PollEvent(&e) != 0 )
+    {
+        if(e.type == SDL_QUIT)
+            quit = true;
+        if(quit)
+            break;
+        draw();
+    }
     close();
     return 0;
 }
@@ -86,5 +96,4 @@ void draw()
 {
     SDL_BlitSurface(g_board, NULL, g_surface, NULL);
     SDL_UpdateWindowSurface(g_window);
-    SDL_Delay(2000);
 }
