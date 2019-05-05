@@ -34,12 +34,13 @@ int main(int argc, char* argv[])
     // Handle event
     SDL_Event e;
     bool quit = false;
-    while(SDL_PollEvent(&e) != 0 )
+    while(!quit)
     {
-        if(e.type == SDL_QUIT)
-            quit = true;
-        if(quit)
-            break;
+        while(SDL_PollEvent(&e) != 0 )
+        {
+            if(e.type == SDL_QUIT)
+                quit = true;
+        }
         draw();
     }
     close();
