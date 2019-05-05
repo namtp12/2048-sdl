@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -9,8 +10,9 @@ const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 480;
 
 SDL_Window *g_window = NULL;
-SDL_Surface *g_surface = NULL;
-SDL_Surface *g_board = NULL;
+SDL_Renderer *g_renderer = NULL;
+SDL_Texture *g_texture = NULL;
+SDL_Texture* load_texture(string path);
 
 bool init();
 
@@ -87,6 +89,10 @@ bool init()
     }
     else
     {
+        if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		{
+			printf( "Warning: Linear texture filtering not enabled!" );
+		}
         g_window = SDL_CreateWindow("2048", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if(g_window == NULL)
         {
@@ -95,7 +101,15 @@ bool init()
         }
         else
         {
-            g_surface = SDL_GetWindowSurface(g_window);
+            g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
+            if(g_renderer == NULL)
+            {
+                cout << "Can not create renderer!" << endl;
+            }
+            else
+            {
+                SDL_SetRenderDrawColor(g_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+            }
         }
     }
     return success;
@@ -105,10 +119,10 @@ bool load_media()
 {
     bool success = true;
     const char* file_path = "board.bmp";
-    g_board = SDL_LoadBMP(file_path);
-    if(g_board == NULL)
+    g_texture = load_texture(file_path);
+    if(g_texture == NULL)
     {
-        cout << "File not found!: " << file_path << endl;
+        cout << "Can not load texture!: " << file_path << endl;
         success = false;
     }
     return success;
@@ -116,15 +130,43 @@ bool load_media()
 
 void close()
 {
-    SDL_FreeSurface(g_surface);
-    g_surface = NULL;
+    SDL_DestroyTexture(g_texture);
+    g_texture = NULL;
+    SDL_DestroyRenderer(g_renderer);
     SDL_DestroyWindow(g_window);
     g_window = NULL;
+    g_renderer = NULL;
+    IMG_Quit();
     SDL_Quit();
 }
 
 void draw()
 {
-    SDL_BlitSurface(g_board, NULL, g_surface, NULL);
-    SDL_UpdateWindowSurface(g_window);
+    SDL_RenderClear(g_renderer);
+    SDL_RenderCopy(g_renderer, g_texture, NULL, NULL);
+    SDL_RenderPresent(g_renderer);
+}
+
+SDL_Texture* load_texture(string path)
+{
+    SDL_Texture *new_texture = NULL;
+    SDL_Surface *init_surface = IMG_Load(path.c_str());
+    if(init_surface == NULL)
+    {
+        cout << "Can not init surface from " << path.c_str() << " " << IMG_GetError();
+    }
+    else
+    {
+        new_texture = SDL_CreateTextureFromSurface(g_renderer, init_surface);
+        if(new_texture == NULL)
+        {
+            cout << "Can not create texture from surface " << SDL_GetError() << endl;
+        }
+        else
+        {
+            // do nothing here
+        }
+        SDL_FreeSurface(init_surface);
+    }
+    return new_texture;
 }
