@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <cstdio>
+#include <cstdlib>
 
 using namespace std;
 
@@ -40,6 +41,35 @@ int main(int argc, char* argv[])
         {
             if(e.type == SDL_QUIT)
                 quit = true;
+            else if(e.type == SDL_KEYDOWN)
+            {
+                switch( e.key.keysym.sym )
+                {
+                    case SDLK_w:
+                    system("cls");
+                    cout << "w" << endl;
+                    break;
+
+                    case SDLK_s:
+                    system("cls");
+                    cout << "s" << endl;
+                    break;
+
+                    case SDLK_a:
+                    system("cls");
+                    cout << "a" << endl;
+                    break;
+
+                    case SDLK_d:
+                    system("cls");
+                    cout << "d" << endl;
+                    break;
+
+                    default:
+                    //
+                    break;
+                }
+            }
         }
         draw();
     }
