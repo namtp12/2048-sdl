@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="2048-cmd" />
+		<Option title="2048-sdl" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/2048-cmd" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/2048-sdl" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/2048-cmd" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/2048-sdl" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -47,11 +47,8 @@
 			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_ttf-2.0.15/i686-w64-mingw32/lib" />
 			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_mixer-2.0.4/i686-w64-mingw32/lib" />
 		</Linker>
-		<Unit filename="include/Game.h" />
-		<Unit filename="include/GameCmd.h" />
+		<Unit filename="cb.bmp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/Game.cpp" />
-		<Unit filename="src/GameCmd.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars set="sdl" />
