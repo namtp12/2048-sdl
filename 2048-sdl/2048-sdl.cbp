@@ -48,7 +48,11 @@
 			<Add directory="D:/ProgramFiles/CodeBlocks1211/MinGW/3rd/SDL2_mixer-2.0.4/i686-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="cb.bmp" />
+		<Unit filename="include/Tile.h" />
+		<Unit filename="include/TileBoard.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Tile.cpp" />
+		<Unit filename="src/TileBoard.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars set="sdl" />
