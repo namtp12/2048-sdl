@@ -33,6 +33,9 @@ public:
     bool can_do_move(int line, int col, int next_line, int next_col);
 
     void add_piece();
+
+    bool is_board_full();
+    bool game_over();
 protected:
 private:
 };

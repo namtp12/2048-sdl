@@ -40,6 +40,8 @@ void GameCmd::showUI()
         }
         cout << endl;
     }
+    if(game_over()) cout << "Game Over!" << endl;
+//    cout << is_board_full()<< " " << game_over(); // Testing
 }
 
 pair<int, int> GameCmd::gen_unoccupied_pos()
@@ -109,4 +111,26 @@ void GameCmd::add_piece()
     pair<int,int> pos = gen_unoccupied_pos();
     int val = (rand() % 2 + 1) * 2;
     board[pos.first][pos.second] = val;
+}
+
+bool GameCmd::is_board_full()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+        for(int j = 0; j < BOARD_SIZE; j++)
+            if(!board[i][j]) return false;
+    return true;
+}
+
+bool GameCmd::game_over()
+{
+    if(!is_board_full()) return false;
+    // Check if any of 2 adjacent tile is equal
+    if(board[BOARD_SIZE - 1][BOARD_SIZE - 1] == board[BOARD_SIZE - 2][BOARD_SIZE - 1] ||
+       board[BOARD_SIZE - 1][BOARD_SIZE - 1] == board[BOARD_SIZE - 1][BOARD_SIZE - 2])
+       return false;
+    for(int i = 0; i < BOARD_SIZE - 1; i++)
+        for(int j = 0; j < BOARD_SIZE - 1; j++)
+            if(board[i][j] == board[i + 1][j] || board[i][j] == board[i][j + 1])
+                return false;
+    return true;
 }
