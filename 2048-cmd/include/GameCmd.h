@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define BOARD_SIZE 4
+#define BOARD_SIZE 2
 
 extern int board[BOARD_SIZE][BOARD_SIZE];
 extern int board_copy[BOARD_SIZE][BOARD_SIZE];

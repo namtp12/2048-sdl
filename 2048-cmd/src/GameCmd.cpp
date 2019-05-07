@@ -48,8 +48,8 @@ pair<int, int> GameCmd::gen_unoccupied_pos()
     int occupied = 1;
     while(occupied)
     {
-        line = rand() % 4;
-        col = rand() % 4;
+        line = rand() % BOARD_SIZE;
+        col = rand() % BOARD_SIZE;
         if(board[line][col] == 0)
             occupied = 0;
     }
@@ -63,21 +63,21 @@ void GameCmd::apply_move(int direction)
     int start_line = 0, start_col = 0, line_step = 1, col_step = 1;
     if(direction == 0)
     {
-        start_line = 3;
+        start_line = BOARD_SIZE - 1;
         line_step = -1;
     }
     if(direction == 1)
     {
-        start_col = 3;
+        start_col = BOARD_SIZE - 1;
         col_step = -1;
     }
     int next_i, next_j, move_possible, can_add_piece = 0;
     do
     {
         move_possible = 0;
-        for(int i = start_line; 0 <= i && i < 4; i += line_step)
+        for(int i = start_line; 0 <= i && i < BOARD_SIZE; i += line_step)
         {
-            for(int j = start_col; 0 <=j && j < 4; j += col_step)
+            for(int j = start_col; 0 <=j && j < BOARD_SIZE; j += col_step)
             {
                 next_i = i + dir_line[direction];
                 next_j = j + dir_col[direction];
@@ -98,7 +98,7 @@ void GameCmd::apply_move(int direction)
 
 bool GameCmd::can_do_move(int line, int col, int next_line, int next_col)
 {
-    if(next_line < 0 || next_col < 0 || next_line >= 4 || next_col >= 4
+    if(next_line < 0 || next_col < 0 || next_line >= BOARD_SIZE || next_col >= BOARD_SIZE
        || (board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0))
         return false;
     return true;
@@ -107,5 +107,6 @@ bool GameCmd::can_do_move(int line, int col, int next_line, int next_col)
 void GameCmd::add_piece()
 {
     pair<int,int> pos = gen_unoccupied_pos();
-    board[pos.first][pos.second] = 2;
+    int val = (rand() % 2 + 1) * 2;
+    board[pos.first][pos.second] = val;
 }
