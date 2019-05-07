@@ -3,6 +3,25 @@
 Tile::Tile()
 {
     texture = NULL;
+    renderer = NULL;
+    font = NULL;
+    width = 0;
+    height = 0;
+}
+
+Tile::Tile(SDL_Renderer *renderer)
+{
+    texture = NULL;
+    this->renderer = renderer;
+    this->font = NULL;
+    width = 0;
+    height = 0;
+}
+Tile::Tile(SDL_Renderer *renderer, TTF_Font *font)
+{
+    texture = NULL;
+    this->renderer = renderer;
+    this->font = font;
     width = 0;
     height = 0;
 }
@@ -43,7 +62,7 @@ bool Tile::loadFromFile( std::string path )
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
+        newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
 		if( newTexture == NULL )
 		{
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -51,8 +70,8 @@ bool Tile::loadFromFile( std::string path )
 		else
 		{
 			//Get image dimensions
-			mWidth = loadedSurface->w;
-			mHeight = loadedSurface->h;
+			width = loadedSurface->w;
+			height = loadedSurface->h;
 		}
 
 		//Get rid of old loaded surface
@@ -60,8 +79,8 @@ bool Tile::loadFromFile( std::string path )
 	}
 
 	//Return success
-	mTexture = newTexture;
-	return mTexture != NULL;
+	texture = newTexture;
+	return texture != NULL;
 }
 
 int Tile::getWidth()

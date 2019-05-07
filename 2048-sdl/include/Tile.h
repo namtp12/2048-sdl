@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <cstdio>
 #include <iostream>
 
@@ -12,6 +13,8 @@ class Tile
 {
     public:
         Tile();
+        Tile(SDL_Renderer *renderer);
+        Tile(SDL_Renderer *renderer, TTF_Font *font);
         virtual ~Tile();
         bool loadFromFile( std::string path );
 		bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
@@ -22,6 +25,8 @@ class Tile
     protected:
     private:
         SDL_Texture *texture;
+        SDL_Renderer *renderer;
+        TTF_Font *font;
         int width;
         int height;
 };
