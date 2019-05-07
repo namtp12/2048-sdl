@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <cstdio>
+#include <fstream>
 #include "GameCmd.h"
 
 const int SCREEN_WIDTH = 640;

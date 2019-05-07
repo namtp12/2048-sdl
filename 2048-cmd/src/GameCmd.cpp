@@ -4,10 +4,19 @@ int board[BOARD_SIZE][BOARD_SIZE];
 int board_copy[BOARD_SIZE][BOARD_SIZE];
 int dir_line[] = {1, 0, -1, 0};
 int dir_col[] = {0, 1, 0, -1};
+int high_score_flag = 0;
 
 GameCmd::GameCmd()
 {
     score = 0;
+    new_high_score = false;
+}
+
+GameCmd::GameCmd(int high_score)
+{
+    score = 0;
+    new_high_score = false;
+    this->high_score = high_score;
 }
 
 GameCmd::~GameCmd()
@@ -17,6 +26,8 @@ GameCmd::~GameCmd()
 
 void GameCmd::new_game()
 {
+    if(new_high_score) high_score = score;
+    score = 0;
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -40,8 +51,17 @@ void GameCmd::showUI()
         }
         cout << endl;
     }
+    cout << endl << "High score: " << high_score << endl;
     cout << "Score: " << score << endl;
-    if(game_over()) cout << "Game Over!" << endl;
+    if(game_over())
+    {
+        cout << "Game Over!" << endl;
+        if(new_high_score)
+        {
+//            high_score_flag = score; // Put this to game_over();
+            cout << "New high score!" << high_score_flag << endl;
+        }
+    }
 //    cout << is_board_full()<< " " << game_over(); // Testing
 }
 
@@ -135,5 +155,16 @@ bool GameCmd::game_over()
         for(int j = 0; j < BOARD_SIZE - 1; j++)
             if(board[i][j] == board[i + 1][j] || board[i][j] == board[i][j + 1])
                 return false;
+
+    if(score > high_score)
+    {
+        high_score_flag = score; // high score changed, return current high score
+//        high_score = score;
+        new_high_score = true;
+    }
+    else
+    {
+        high_score_flag = 0; // high score not changed
+    }
     return true;
 }
