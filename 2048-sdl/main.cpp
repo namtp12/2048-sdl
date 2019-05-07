@@ -6,11 +6,15 @@
 #include <cstdlib>
 #include <cassert>
 #include "include/Tile.h"
+#define BOARD_SIZE 4
 
 using namespace std;
 
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 480;
+
+int board[BOARD_SIZE][BOARD_SIZE];
+Tile* tile_board[BOARD_SIZE][BOARD_SIZE];
 
 SDL_Window *g_window = NULL;
 SDL_Renderer *g_renderer = NULL;
@@ -157,6 +161,14 @@ void close()
     bg_texture = NULL;
     tile1->free();
     tile1 = NULL;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            tile_board[i][j]->free();
+            tile_board[i][j] = NULL;
+        }
+    }
     TTF_CloseFont( g_font );
     g_font = NULL;
     SDL_DestroyRenderer(g_renderer);
@@ -172,7 +184,14 @@ void draw()
 {
     SDL_RenderClear(g_renderer);
     bg_texture->render(0, 0);
-    tile1->render(200, 200);
+//    tile1->render(200, 200);
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            tile_board[i][j]->render(25 + 50 * i, 25 + 50 * j);
+        }
+    }
     SDL_RenderPresent(g_renderer);
 }
 
@@ -212,6 +231,14 @@ bool load_title()
 	tile1 = new Tile(g_renderer, g_font);
 	SDL_Color textColor = { 0, 0, 0 };
 	tile1->loadFromRenderedText("2", textColor);
+	for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j <BOARD_SIZE; j++)
+        {
+            tile_board[i][j] = new Tile(g_renderer, g_font);
+            tile_board[i][j]->loadFromRenderedText("2", textColor);
+        }
+    }
 	if( bg_texture == NULL )
 	{
 		printf( "Failed to load texture image!\n" );
