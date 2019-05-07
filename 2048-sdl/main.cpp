@@ -163,6 +163,7 @@ void close()
     SDL_DestroyWindow(g_window);
     g_window = NULL;
     g_renderer = NULL;
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }
@@ -171,6 +172,7 @@ void draw()
 {
     SDL_RenderClear(g_renderer);
     bg_texture->render(0, 0);
+    tile1->render(200, 200);
     SDL_RenderPresent(g_renderer);
 }
 
