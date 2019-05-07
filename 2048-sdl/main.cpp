@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <cassert>
+#include "include/Tile.h"
 
 using namespace std;
 
@@ -12,13 +14,17 @@ const int SCREEN_HEIGHT = 480;
 
 SDL_Window *g_window = NULL;
 SDL_Renderer *g_renderer = NULL;
-SDL_Texture *bg_texture = NULL;
+Tile *bg_texture = NULL;
 SDL_Texture* load_texture(string path);
 TTF_Font *g_font = NULL;
+
+Tile *tile1 = NULL;
 
 bool init();
 
 bool load_media();
+
+bool load_title();
 
 void close();
 
@@ -34,6 +40,11 @@ int main(int argc, char* argv[])
     if(!load_media())
     {
         cout << "Can not load media" << endl;
+        return -1;
+    }
+    if(!load_title())
+    {
+        cout << "Can not load title" << endl;
         return -1;
     }
     // Handle event
@@ -131,13 +142,6 @@ bool init()
 bool load_media()
 {
     bool success = true;
-    const char* file_path = "board.bmp";
-    bg_texture = load_texture(file_path);
-    if(bg_texture == NULL)
-    {
-        cout << "Can not load texture!: " << file_path << endl;
-        success = false;
-    }
     g_font = TTF_OpenFont("arial.ttf", 28 );
 	if( g_font == NULL )
 	{
@@ -149,8 +153,12 @@ bool load_media()
 
 void close()
 {
-    SDL_DestroyTexture(bg_texture);
+    bg_texture->free();
     bg_texture = NULL;
+    tile1->free();
+    tile1 = NULL;
+    TTF_CloseFont( g_font );
+    g_font = NULL;
     SDL_DestroyRenderer(g_renderer);
     SDL_DestroyWindow(g_window);
     g_window = NULL;
@@ -162,7 +170,7 @@ void close()
 void draw()
 {
     SDL_RenderClear(g_renderer);
-    SDL_RenderCopy(g_renderer, bg_texture, NULL, NULL);
+    bg_texture->render(0, 0);
     SDL_RenderPresent(g_renderer);
 }
 
@@ -188,4 +196,30 @@ SDL_Texture* load_texture(string path)
         SDL_FreeSurface(init_surface);
     }
     return new_texture;
+}
+
+bool load_title()
+{
+    //Loading success flag
+	bool success = true;
+
+	assert(g_font != NULL);
+	bg_texture = new Tile(g_renderer, g_font);
+	bg_texture->loadFromFile("board.bmp");
+
+	tile1 = new Tile(g_renderer, g_font);
+	SDL_Color textColor = { 0, 0, 0 };
+	tile1->loadFromRenderedText("2", textColor);
+	if( bg_texture == NULL )
+	{
+		printf( "Failed to load texture image!\n" );
+		success = false;
+	}
+	if(tile1 == NULL)
+    {
+        printf("Failed to load texture text!\n");
+        success = false;
+    }
+
+	return success;
 }
