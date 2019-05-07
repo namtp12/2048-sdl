@@ -38,6 +38,7 @@ public:
     bool game_over();
 protected:
 private:
+    int score;
 };
 
 #endif // GAMECMD_H

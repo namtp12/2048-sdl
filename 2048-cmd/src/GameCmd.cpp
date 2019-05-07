@@ -7,7 +7,7 @@ int dir_col[] = {0, 1, 0, -1};
 
 GameCmd::GameCmd()
 {
-
+    score = 0;
 }
 
 GameCmd::~GameCmd()
@@ -40,6 +40,7 @@ void GameCmd::showUI()
         }
         cout << endl;
     }
+    cout << "Score: " << score << endl;
     if(game_over()) cout << "Game Over!" << endl;
 //    cout << is_board_full()<< " " << game_over(); // Testing
 }
@@ -85,6 +86,8 @@ void GameCmd::apply_move(int direction)
                 next_j = j + dir_col[direction];
                 if(board[i][j] && can_do_move(i, j, next_i, next_j))
                 {
+                    if(board[next_i][next_j])
+                        score = score + board[next_i][next_j] + board[i][j];
                     board[next_i][next_j] += board[i][j];
                     board[i][j] = 0;
                     move_possible = 1;
