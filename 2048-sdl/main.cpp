@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -11,8 +12,9 @@ const int SCREEN_HEIGHT = 480;
 
 SDL_Window *g_window = NULL;
 SDL_Renderer *g_renderer = NULL;
-SDL_Texture *g_texture = NULL;
+SDL_Texture *bg_texture = NULL;
 SDL_Texture* load_texture(string path);
+TTF_Font *g_font = NULL;
 
 bool init();
 
@@ -67,6 +69,12 @@ int main(int argc, char* argv[])
                     cout << "d" << endl;
                     break;
 
+                    case SDLK_q:
+                    system("cls");
+                    quit = true;
+                    cout << "q" << endl;
+                    break;
+
                     default:
                     //
                     break;
@@ -109,6 +117,11 @@ bool init()
             else
             {
                 SDL_SetRenderDrawColor(g_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                if(TTF_Init() == -1)
+                {
+                    cout << "Can not init ttf " << TTF_GetError() << endl;
+                    success = false;
+                }
             }
         }
     }
@@ -119,19 +132,25 @@ bool load_media()
 {
     bool success = true;
     const char* file_path = "board.bmp";
-    g_texture = load_texture(file_path);
-    if(g_texture == NULL)
+    bg_texture = load_texture(file_path);
+    if(bg_texture == NULL)
     {
         cout << "Can not load texture!: " << file_path << endl;
         success = false;
     }
+    g_font = TTF_OpenFont("arial.ttf", 28 );
+	if( g_font == NULL )
+	{
+		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+		success = false;
+	}
     return success;
 }
 
 void close()
 {
-    SDL_DestroyTexture(g_texture);
-    g_texture = NULL;
+    SDL_DestroyTexture(bg_texture);
+    bg_texture = NULL;
     SDL_DestroyRenderer(g_renderer);
     SDL_DestroyWindow(g_window);
     g_window = NULL;
@@ -143,7 +162,7 @@ void close()
 void draw()
 {
     SDL_RenderClear(g_renderer);
-    SDL_RenderCopy(g_renderer, g_texture, NULL, NULL);
+    SDL_RenderCopy(g_renderer, bg_texture, NULL, NULL);
     SDL_RenderPresent(g_renderer);
 }
 
