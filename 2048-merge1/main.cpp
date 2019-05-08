@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cassert>
+#include <iomanip>
 #include "include/Tile.h"
 #define BOARD_SIZE 4
 
@@ -50,6 +51,7 @@ bool game_over();
 int score;
 int high_score;
 bool new_high_score;
+int high_score_flag;
 
 int main(int argc, char* argv[])
 {
@@ -268,24 +270,6 @@ bool load_title()
     }
 
 	return success;
-}
-
-GameCmd()
-{
-    score = 0;
-    new_high_score = false;
-}
-
-GameCmd(int high_score)
-{
-    score = 0;
-    new_high_score = false;
-    this->high_score = high_score;
-}
-
-~GameCmd()
-{
-
 }
 
 void new_game()
