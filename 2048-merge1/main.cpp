@@ -270,25 +270,25 @@ bool load_title()
 	return success;
 }
 
-GameCmd::GameCmd()
+GameCmd()
 {
     score = 0;
     new_high_score = false;
 }
 
-GameCmd::GameCmd(int high_score)
+GameCmd(int high_score)
 {
     score = 0;
     new_high_score = false;
     this->high_score = high_score;
 }
 
-GameCmd::~GameCmd()
+~GameCmd()
 {
 
 }
 
-void GameCmd::new_game()
+void new_game()
 {
     if(new_high_score) high_score = score;
     score = 0;
@@ -300,7 +300,7 @@ void GameCmd::new_game()
     add_piece();
 }
 
-void GameCmd::showUI()
+void showUI()
 {
     system("cls");
     cout << "n: new game, w: up-1, s: down-0, a: left-3, d: right-2" << endl;
@@ -329,7 +329,7 @@ void GameCmd::showUI()
 //    cout << is_board_full()<< " " << game_over(); // Testing
 }
 
-pair<int, int> GameCmd::gen_unoccupied_pos()
+pair<int, int> gen_unoccupied_pos()
 {
     int line, col;
     int occupied = 1;
@@ -345,7 +345,7 @@ pair<int, int> GameCmd::gen_unoccupied_pos()
     return make_pair(line, col);
 }
 
-void GameCmd::apply_move(int direction)
+void apply_move(int direction)
 {
     int start_line = 0, start_col = 0, line_step = 1, col_step = 1;
     if(direction == 0)
@@ -385,7 +385,7 @@ void GameCmd::apply_move(int direction)
         add_piece();
 }
 
-bool GameCmd::can_do_move(int line, int col, int next_line, int next_col)
+bool can_do_move(int line, int col, int next_line, int next_col)
 {
     if(next_line < 0 || next_col < 0 || next_line >= BOARD_SIZE || next_col >= BOARD_SIZE
        || (board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0))
@@ -393,14 +393,14 @@ bool GameCmd::can_do_move(int line, int col, int next_line, int next_col)
     return true;
 }
 
-void GameCmd::add_piece()
+void add_piece()
 {
     pair<int,int> pos = gen_unoccupied_pos();
     int val = (rand() % 2 + 1) * 2;
     board[pos.first][pos.second] = val;
 }
 
-bool GameCmd::is_board_full()
+bool is_board_full()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -408,7 +408,7 @@ bool GameCmd::is_board_full()
     return true;
 }
 
-bool GameCmd::game_over()
+bool game_over()
 {
     if(!is_board_full()) return false;
     // Check if any of 2 adjacent tile is equal
