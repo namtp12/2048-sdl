@@ -1,0 +1,1 @@
+This project was originally copied from 2048-sdl project and add some funtion in 2048-cmd project
