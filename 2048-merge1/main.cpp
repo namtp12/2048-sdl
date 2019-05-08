@@ -6,8 +6,9 @@
 #include <cstdlib>
 #include <cassert>
 #include <iomanip>
+#include <sstream>
 #include "include/Tile.h"
-#define BOARD_SIZE 4
+#define BOARD_SIZE 2
 
 using namespace std;
 
@@ -45,6 +46,7 @@ void apply_move(int current_direction);
 bool can_do_move(int line, int col, int next_line, int next_col);
 
 void add_piece();
+void showUI();
 
 bool is_board_full();
 bool game_over();
@@ -52,6 +54,8 @@ int score;
 int high_score;
 bool new_high_score;
 int high_score_flag;
+
+string to_string_(int n);
 
 int main(int argc, char* argv[])
 {
@@ -73,6 +77,7 @@ int main(int argc, char* argv[])
     // Handle event
     SDL_Event e;
     bool quit = false;
+    new_game();
     while(!quit)
     {
         while(SDL_PollEvent(&e) != 0 )
@@ -84,29 +89,27 @@ int main(int argc, char* argv[])
                 switch( e.key.keysym.sym )
                 {
                     case SDLK_w:
-                    system("cls");
-                    cout << "w" << endl;
+                    apply_move(2);
                     break;
 
                     case SDLK_s:
-                    system("cls");
-                    cout << "s" << endl;
+                    apply_move(0);
                     break;
 
                     case SDLK_a:
-                    system("cls");
-                    cout << "a" << endl;
+                    apply_move(3);
                     break;
 
                     case SDLK_d:
-                    system("cls");
-                    cout << "d" << endl;
+                    apply_move(1);
                     break;
 
                     case SDLK_q:
-                    system("cls");
                     quit = true;
-                    cout << "q" << endl;
+                    break;
+
+                    case SDLK_n:
+                    new_game();
                     break;
 
                     default:
@@ -116,6 +119,7 @@ int main(int argc, char* argv[])
             }
         }
         draw();
+        showUI();
     }
     close();
     return 0;
@@ -208,6 +212,9 @@ void draw()
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
+            tile_board[i][j]->free();
+            SDL_Color color = {0, 0, 0};
+            tile_board[i][j]->loadFromRenderedText(to_string_(board[i][j]), color);
             tile_board[i][j]->render(25 + 50 * i, 25 + 50 * j);
         }
     }
@@ -249,13 +256,14 @@ bool load_title()
 
 	tile1 = new Tile(g_renderer, g_font);
 	SDL_Color textColor = { 0, 0, 0 };
-	tile1->loadFromRenderedText("2", textColor);
+	string a = to_string_(4224);
+	tile1->loadFromRenderedText(a, textColor);
 	for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j <BOARD_SIZE; j++)
         {
             tile_board[i][j] = new Tile(g_renderer, g_font);
-            tile_board[i][j]->loadFromRenderedText("2", textColor);
+            tile_board[i][j]->loadFromRenderedText(to_string_(board[i][j]), textColor);
         }
     }
 	if( bg_texture == NULL )
@@ -415,4 +423,11 @@ bool game_over()
         high_score_flag = 0; // high score not changed
     }
     return true;
+}
+
+string to_string_(int num)
+{
+    ostringstream ss;
+    ss << num;
+    return ss.str();
 }
