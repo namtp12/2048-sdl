@@ -36,6 +36,21 @@ void close();
 
 void draw();
 
+void new_game();
+void showUI();
+pair<int, int> gen_unoccupied_pos();
+
+void apply_move(int current_direction);
+bool can_do_move(int line, int col, int next_line, int next_col);
+
+void add_piece();
+
+bool is_board_full();
+bool game_over();
+int score;
+int high_score;
+bool new_high_score;
+
 int main(int argc, char* argv[])
 {
     if(!init())
