@@ -7,8 +7,10 @@
 #include <cassert>
 #include <iomanip>
 #include <sstream>
+#include <ctime>
+#include <fstream>
 #include "include/Tile.h"
-#define BOARD_SIZE 3
+#define BOARD_SIZE 2
 
 using namespace std;
 
@@ -62,6 +64,16 @@ string to_string_(int n);
 
 int main(int argc, char* argv[])
 {
+    //Load high score from file
+    ifstream file_in("highscore.txt");
+    if(!file_in)
+    {
+        cout << "Can not find high score file!" << endl;
+        exit(1);
+    }
+    file_in >> high_score;
+    file_in.close();
+
     if(!init())
     {
         cout << "Can not init!" << endl;
@@ -77,9 +89,11 @@ int main(int argc, char* argv[])
         cout << "Can not load title" << endl;
         return -1;
     }
-    // Handle event
     SDL_Event e;
     bool quit = false;
+    srand(time(0));
+    ofstream file_out("highscore.txt", ios::trunc);
+    bool written = false;
     new_game();
     reset_new_tile();
     while(!quit)
@@ -90,6 +104,13 @@ int main(int argc, char* argv[])
                 quit = true;
             else if(e.type == SDL_KEYDOWN)
             {
+                if(game_over() && !written)
+                {
+                //            cout << high_score_flag;
+                    if(high_score_flag) file_out << high_score_flag << endl;
+                    else file_out << high_score << endl;
+                    written = true;
+                }
                 switch( e.key.keysym.sym )
                 {
                     case SDLK_w:
@@ -109,11 +130,14 @@ int main(int argc, char* argv[])
                     break;
 
                     case SDLK_q:
+                    if(!written) file_out << high_score << endl;
+                    written = true;
                     quit = true;
                     break;
 
                     case SDLK_n:
                     new_game();
+                    written = false;
                     break;
 
                     default:
@@ -125,6 +149,7 @@ int main(int argc, char* argv[])
         draw();
         showUI();
     }
+    file_out.close();
     close();
     return 0;
 }
