@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <sstream>
 #include "include/Tile.h"
-#define BOARD_SIZE 2
+#define BOARD_SIZE 3
 
 using namespace std;
 
@@ -32,7 +32,7 @@ bool init();
 
 bool load_media();
 
-bool load_title();
+bool load_tile();
 
 void close();
 
@@ -51,7 +51,7 @@ void showUI();
 bool is_board_full();
 bool game_over();
 int score;
-int high_score;
+int high_score; //TODO: init this high score by reading from file
 bool new_high_score;
 int high_score_flag;
 
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         cout << "Can not load media" << endl;
         return -1;
     }
-    if(!load_title())
+    if(!load_tile())
     {
         cout << "Can not load title" << endl;
         return -1;
@@ -169,7 +169,7 @@ bool init()
 bool load_media()
 {
     bool success = true;
-    g_font = TTF_OpenFont("arial.ttf", 28 );
+    g_font = TTF_OpenFont("C:\\Windows\\Fonts\\calibri.ttf", 28 );
 	if( g_font == NULL )
 	{
 		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
@@ -214,8 +214,8 @@ void draw()
         {
             tile_board[i][j]->free();
             SDL_Color color = {0, 0, 0};
-            tile_board[i][j]->loadFromRenderedText(to_string_(board[i][j]), color);
-            tile_board[i][j]->render(25 + 50 * i, 25 + 50 * j);
+            tile_board[i][j]->loadFromRenderedText(to_string_(board[j][i]), color);
+            tile_board[i][j]->render(45 + 70 * i, 45 + 70 * j);
         }
     }
     SDL_RenderPresent(g_renderer);
@@ -245,7 +245,7 @@ SDL_Texture* load_texture(string path)
     return new_texture;
 }
 
-bool load_title()
+bool load_tile()
 {
     //Loading success flag
 	bool success = true;
@@ -283,6 +283,7 @@ bool load_title()
 void new_game()
 {
     if(new_high_score) high_score = score;
+    new_high_score = false;
     score = 0;
     for(int i = 0; i < BOARD_SIZE; i++)
     {
