@@ -371,9 +371,11 @@ void apply_move(int direction)
                 if(board[i][j] && can_do_move(i, j, next_i, next_j))
                 {
                     if(board[next_i][next_j])
+                    {
                         score = score + board[next_i][next_j] + board[i][j];
+                        is_new_tile[next_i][next_j] = true;
+                    }
                     board[next_i][next_j] += board[i][j];
-                    is_new_tile[next_i][next_j] = true;
                     board[i][j] = 0;
                     move_possible = 1;
                     can_add_piece = 1;
