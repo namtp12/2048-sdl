@@ -215,7 +215,9 @@ void draw()
             tile_board[i][j]->free();
             SDL_Color color = {0, 0, 0};
             tile_board[i][j]->loadFromRenderedText(to_string_(board[j][i]), color);
-            tile_board[i][j]->render(45 + 70 * i, 45 + 70 * j);
+            if(board[j][i] > 0)
+                tile_board[i][j]->render(45 + 80 * i - tile_board[i][j]->getWidth() / 2,
+                                         45 + 80 * j - tile_board[i][j]->getHeight() / 2);
         }
     }
     SDL_RenderPresent(g_renderer);
