@@ -17,6 +17,7 @@ const int SCREEN_HEIGHT = 480;
 
 int board[BOARD_SIZE][BOARD_SIZE];
 Tile* tile_board[BOARD_SIZE][BOARD_SIZE];
+bool is_new_tile[BOARD_SIZE][BOARD_SIZE];
 int dir_line[] = {1, 0, -1, 0};
 int dir_col[] = {0, 1, 0, -1};
 
@@ -48,6 +49,8 @@ bool can_do_move(int line, int col, int next_line, int next_col);
 void add_piece();
 void showUI();
 
+void reset_new_tile();
+
 bool is_board_full();
 bool game_over();
 int score;
@@ -78,6 +81,7 @@ int main(int argc, char* argv[])
     SDL_Event e;
     bool quit = false;
     new_game();
+    reset_new_tile();
     while(!quit)
     {
         while(SDL_PollEvent(&e) != 0 )
@@ -354,6 +358,7 @@ void apply_move(int direction)
         col_step = -1;
     }
     int next_i, next_j, move_possible, can_add_piece = 0;
+    reset_new_tile();
     do
     {
         move_possible = 0;
@@ -368,6 +373,7 @@ void apply_move(int direction)
                     if(board[next_i][next_j])
                         score = score + board[next_i][next_j] + board[i][j];
                     board[next_i][next_j] += board[i][j];
+                    is_new_tile[next_i][next_j] = true;
                     board[i][j] = 0;
                     move_possible = 1;
                     can_add_piece = 1;
@@ -383,7 +389,8 @@ void apply_move(int direction)
 bool can_do_move(int line, int col, int next_line, int next_col)
 {
     if(next_line < 0 || next_col < 0 || next_line >= BOARD_SIZE || next_col >= BOARD_SIZE
-       || (board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0))
+       || (board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0)
+       || is_new_tile[line][col] || is_new_tile[next_line][next_col])
         return false;
     return true;
 }
@@ -433,4 +440,13 @@ string to_string_(int num)
     ostringstream ss;
     ss << num;
     return ss.str();
+}
+
+void reset_new_tile()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+            is_new_tile[i][j] = false;
+    }
 }
