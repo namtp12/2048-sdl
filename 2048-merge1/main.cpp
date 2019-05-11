@@ -32,7 +32,11 @@ const SDL_Color color_black = {0, 0, 0};
 
 Tile *score_texture = NULL;
 Tile *high_score_textture = NULL;
+
 Tile *game_over_texture = NULL;
+Tile *high_score_text_texture = NULL;
+Tile *score_text_texture = NULL;
+Tile *new_high_score_text_texture = NULL;
 
 bool init();
 
@@ -113,8 +117,6 @@ int main(int argc, char* argv[])
                     if(high_score_flag) file_out << high_score_flag << endl;
                     else file_out << high_score << endl;
                     written = true;
-                    game_over_texture->loadFromRenderedText("Game Over!", color_black);
-                    game_over_texture->render(high_score_textture->getWidth(), 0);
                 }
                 switch( e.key.keysym.sym )
                 {
@@ -214,14 +216,24 @@ bool load_media()
 
 void close()
 {
+    //Free background and score
     bg_texture->free();
     bg_texture = NULL;
     score_texture->free();
     score_texture = NULL;
-    game_over_texture->free();
-    game_over_texture = NULL;
     high_score_textture->free();
     high_score_textture = NULL;
+
+    //Free text texture
+    game_over_texture->free();
+    game_over_texture = NULL;
+    high_score_text_texture->free();
+    high_score_text_texture = NULL;
+    score_text_texture->free();
+    score_text_texture = NULL;
+    new_high_score_text_texture->free();
+    new_high_score_text_texture = NULL;
+
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -245,10 +257,27 @@ void draw()
 {
     SDL_RenderClear(g_renderer);
     bg_texture->render(0, SCREEN_HEIGHT - SCREEN_WIDTH);
-    high_score_textture->render(0, 0);
+    if(game_over())
+    {
+        game_over_texture->render(SCREEN_WIDTH - game_over_texture->getWidth(), 0);
+        if(high_score_flag)
+            new_high_score_text_texture->render(SCREEN_WIDTH - new_high_score_text_texture->getWidth(),
+                                                game_over_texture->getHeight());
+    }
+
+    //Draw highscore text
+    high_score_text_texture->render(0, 0);
+
+    //Draw score text texture
+    score_text_texture->render(0, high_score_text_texture->getHeight());
+
+    // Draw high_score
+    high_score_textture->render(high_score_text_texture->getWidth(), 0);
+
+    // Draw score
     score_texture->free();
     score_texture->loadFromRenderedText(to_string_(score), color_black);
-    score_texture->render(0, high_score_textture->getHeight());
+    score_texture->render(score_text_texture->getWidth(), high_score_text_texture->getHeight());
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -300,9 +329,17 @@ bool load_tile()
 	high_score_textture = new Tile(g_renderer, g_font);
 	score_texture = new Tile(g_renderer, g_font);
     game_over_texture = new Tile(g_renderer, g_font);
+    high_score_text_texture = new Tile(g_renderer, g_font);
+    score_text_texture = new Tile(g_renderer, g_font);
+    new_high_score_text_texture = new Tile(g_renderer, g_font);
+
 	high_score_textture->loadFromRenderedText(to_string_(high_score), color_black);
 	score_texture->loadFromRenderedText(to_string_(score), color_black);
     game_over_texture->loadFromRenderedText("Game Over!", color_black);
+    high_score_text_texture->loadFromRenderedText("High Score: ", color_black);
+    score_text_texture->loadFromRenderedText("Score: ", color_black);
+    new_high_score_text_texture->loadFromRenderedText("New High Score!", color_black);
+
 	for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j <BOARD_SIZE; j++)
@@ -330,9 +367,23 @@ void new_game()
     if(new_high_score)
     {
         high_score = score;
-        high_score_textture->free();
+        if(high_score_textture != NULL)
+            high_score_textture->free();
+        high_score_textture = new Tile(g_renderer, g_font);
         high_score_textture->loadFromRenderedText(to_string_(high_score), color_black);
     }
+    // Load game over text
+    if(game_over_texture != NULL)
+    {
+        game_over_texture->free();
+        new_high_score_text_texture->free();
+    }
+    game_over_texture = new Tile(g_renderer, g_font);
+    game_over_texture->loadFromRenderedText("Game Over!", color_black);
+
+    new_high_score_text_texture = new Tile(g_renderer, g_font);
+    new_high_score_text_texture->loadFromRenderedText("New High Score!", color_black);
+
     new_high_score = false;
     score = 0;
     for(int i = 0; i < BOARD_SIZE; i++)
