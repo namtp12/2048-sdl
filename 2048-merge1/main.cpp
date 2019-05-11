@@ -14,8 +14,8 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = 600;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 330;
+const int SCREEN_HEIGHT = 400;
 
 int board[BOARD_SIZE][BOARD_SIZE];
 Tile* tile_board[BOARD_SIZE][BOARD_SIZE];
@@ -235,7 +235,7 @@ void close()
 void draw()
 {
     SDL_RenderClear(g_renderer);
-    bg_texture->render(0, 0);
+    bg_texture->render(0, SCREEN_HEIGHT - SCREEN_WIDTH);
 //    tile1->render(200, 200);
     for(int i = 0; i < BOARD_SIZE; i++)
     {
@@ -246,7 +246,8 @@ void draw()
             tile_board[i][j]->loadFromRenderedText(to_string_(board[j][i]), color);
             if(board[j][i] > 0)
                 tile_board[i][j]->render(45 + 80 * i - tile_board[i][j]->getWidth() / 2,
-                                         45 + 80 * j - tile_board[i][j]->getHeight() / 2);
+                                         45 + 80 * j - tile_board[i][j]->getHeight() / 2
+                                         + (SCREEN_HEIGHT - SCREEN_WIDTH));
         }
     }
     SDL_RenderPresent(g_renderer);
