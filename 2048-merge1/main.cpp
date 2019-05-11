@@ -29,7 +29,9 @@ Tile *bg_texture = NULL;
 SDL_Texture* load_texture(string path);
 TTF_Font *g_font = NULL;
 
-Tile *tile1 = NULL;
+Tile *score_texture = NULL;
+Tile *high_score_textture = NULL;
+Tile *game_over_texture = NULL;
 
 bool init();
 
@@ -211,8 +213,12 @@ void close()
 {
     bg_texture->free();
     bg_texture = NULL;
-    tile1->free();
-    tile1 = NULL;
+    score_texture->free();
+    score_texture = NULL;
+    game_over_texture->free();
+    game_over_texture = NULL;
+    high_score_textture->free();
+    high_score_textture = NULL;
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -236,7 +242,7 @@ void draw()
 {
     SDL_RenderClear(g_renderer);
     bg_texture->render(0, SCREEN_HEIGHT - SCREEN_WIDTH);
-//    tile1->render(200, 200);
+//    high_score_textture->render(200, 200);
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
@@ -286,10 +292,13 @@ bool load_tile()
 	bg_texture = new Tile(g_renderer, g_font);
 	bg_texture->loadFromFile("res/board.bmp");
 
-	tile1 = new Tile(g_renderer, g_font);
+	high_score_textture = new Tile(g_renderer, g_font);
+	score_texture = new Tile(g_renderer, g_font);
+    game_over_texture = new Tile(g_renderer, g_font);
 	SDL_Color textColor = { 0, 0, 0 };
-	string a = to_string_(4224);
-	tile1->loadFromRenderedText(a, textColor);
+	high_score_textture->loadFromRenderedText(to_string_(high_score), textColor);
+	score_texture->loadFromRenderedText(to_string_(score), textColor);
+    game_over_texture->loadFromRenderedText("Game Over!", textColor);
 	for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j <BOARD_SIZE; j++)
@@ -303,7 +312,7 @@ bool load_tile()
 		printf( "Failed to load texture image!\n" );
 		success = false;
 	}
-	if(tile1 == NULL)
+	if(high_score_textture == NULL || score_texture == NULL || game_over_texture == NULL)
     {
         printf("Failed to load texture text!\n");
         success = false;
