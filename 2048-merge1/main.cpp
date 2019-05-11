@@ -123,19 +123,19 @@ int main(int argc, char* argv[])
                 }
                 switch( e.key.keysym.sym )
                 {
-                    case SDLK_w:
+                    case SDLK_w: case SDLK_UP:
                     apply_move(2);
                     break;
 
-                    case SDLK_s:
+                    case SDLK_s: case SDLK_DOWN:
                     apply_move(0);
                     break;
 
-                    case SDLK_a:
+                    case SDLK_a: case SDLK_LEFT:
                     apply_move(3);
                     break;
 
-                    case SDLK_d:
+                    case SDLK_d: case SDLK_RIGHT:
                     apply_move(1);
                     break;
 
