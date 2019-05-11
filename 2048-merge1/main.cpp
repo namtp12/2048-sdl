@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
             }
         }
         draw();
-        showUI();
+//        showUI();
     }
     file_out.close();
     close();
