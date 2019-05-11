@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
     SDL_Event e;
     bool quit = false;
     srand(time(0));
-    ofstream file_out("highscore.txt", ios::trunc);
+    ofstream file_out("res/highscore.txt", ios::trunc);
     bool written = false;
     new_game();
     reset_new_tile();
