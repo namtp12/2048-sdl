@@ -198,7 +198,7 @@ bool init()
 bool load_media()
 {
     bool success = true;
-    g_font = TTF_OpenFont("C:\\Windows\\Fonts\\calibri.ttf", 28 );
+    g_font = TTF_OpenFont("res/calibri.ttf", 28 );
 	if( g_font == NULL )
 	{
 		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
@@ -284,7 +284,7 @@ bool load_tile()
 
 	assert(g_font != NULL);
 	bg_texture = new Tile(g_renderer, g_font);
-	bg_texture->loadFromFile("board.bmp");
+	bg_texture->loadFromFile("res/board.bmp");
 
 	tile1 = new Tile(g_renderer, g_font);
 	SDL_Color textColor = { 0, 0, 0 };
