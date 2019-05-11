@@ -108,7 +108,10 @@ int main(int argc, char* argv[])
         while(SDL_PollEvent(&e) != 0 )
         {
             if(e.type == SDL_QUIT)
+            {
                 quit = true;
+                break;
+            }
             else if(e.type == SDL_KEYDOWN)
             {
                 if(game_over() && !written)
@@ -144,7 +147,8 @@ int main(int argc, char* argv[])
 
                     case SDLK_n:
                     new_game();
-                    written = false;
+                    if(new_high_score) written = true;
+//                    else written = false; // Duplicate highscore written if enable this
                     break;
 
                     default:
