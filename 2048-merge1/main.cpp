@@ -72,7 +72,7 @@ string to_string_(int n);
 int main(int argc, char* argv[])
 {
     //Load high score from file
-    ifstream file_in("highscore.txt");
+    ifstream file_in("res/highscore.txt");
     if(!file_in)
     {
         cout << "Can not find high score file!" << endl;
