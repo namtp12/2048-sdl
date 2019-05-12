@@ -66,6 +66,7 @@ int score;
 int high_score; //TODO: init this high score by reading from file
 bool new_high_score;
 int high_score_flag;
+bool win;
 
 string to_string_(int n);
 
@@ -263,7 +264,14 @@ void draw()
     bg_texture->render(0, SCREEN_HEIGHT - SCREEN_WIDTH);
     if(game_over())
     {
-        game_over_texture->render(SCREEN_WIDTH - game_over_texture->getWidth(), 0);
+        if(!win)
+            game_over_texture->render(SCREEN_WIDTH - game_over_texture->getWidth(), 0);
+        else
+        {
+            game_over_texture->free();
+            game_over_texture->loadFromRenderedText("You win!", color_black);
+            game_over_texture->render(SCREEN_WIDTH - game_over_texture->getWidth(), 0);
+        }
         if(high_score_flag)
             new_high_score_text_texture->render(SCREEN_WIDTH - new_high_score_text_texture->getWidth(),
                                                 game_over_texture->getHeight());
@@ -389,6 +397,7 @@ void new_game()
     new_high_score_text_texture->loadFromRenderedText("New High Score!", color_black);
 
     new_high_score = false;
+    win = false;
     score = 0;
     for(int i = 0; i < BOARD_SIZE; i++)
     {
@@ -417,7 +426,10 @@ void showUI()
     cout << "Score: " << score << endl;
     if(game_over())
     {
-        cout << "Game Over!" << endl;
+        if(!win)
+            cout << "Game Over!" << endl;
+        else
+            cout << "You win!" << endl;
         if(new_high_score)
         {
 //            high_score_flag = score; // Put this to game_over();
@@ -491,7 +503,8 @@ bool can_do_move(int line, int col, int next_line, int next_col)
 {
     if(next_line < 0 || next_col < 0 || next_line >= BOARD_SIZE || next_col >= BOARD_SIZE
        || (board[line][col] != board[next_line][next_col] && board[next_line][next_col] != 0)
-       || is_new_tile[line][col] || is_new_tile[next_line][next_col])
+       || is_new_tile[line][col] || is_new_tile[next_line][next_col]
+       || win)
         return false;
     return true;
 }
@@ -513,6 +526,14 @@ bool is_board_full()
 
 bool game_over()
 {
+    //Check if any tile is bigger or equal to 2048
+    for(int i = 0; i < BOARD_SIZE; i++)
+        for(int j = 0; j < BOARD_SIZE; j++)
+            if(board[i][j] == 2048)
+            {
+                win = true;
+                return true;
+            }
     if(!is_board_full()) return false;
     // Check if any of 2 adjacent tile is equal
     if(board[BOARD_SIZE - 1][BOARD_SIZE - 1] == board[BOARD_SIZE - 2][BOARD_SIZE - 1] ||
@@ -522,7 +543,6 @@ bool game_over()
         for(int j = 0; j < BOARD_SIZE - 1; j++)
             if(board[i][j] == board[i + 1][j] || board[i][j] == board[i][j + 1])
                 return false;
-
     if(score > high_score)
     {
         high_score_flag = score; // high score changed, return current high score
